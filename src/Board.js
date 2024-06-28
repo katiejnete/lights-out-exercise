@@ -86,10 +86,10 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
   // make table board
   const tableBoard = board.map((row,rowIdx) => {
     return (
-      <tr>
+      <tr key={rowIdx}>
       {row.map((cell,cellIdx) => {
-        if (cell) return <Cell key={`${rowIdx}${cellIdx}`} isLit={true} flipCellsAroundMe={flipCellsAround} />;
-        else return <Cell key={`${rowIdx}${cellIdx}`} isLit={false} flipCellsAroundMe={flipCellsAround}/>;
+        if (cell) return <Cell key={cellIdx} isLit={true} flipCellsAroundMe={flipCellsAround} />;
+        else return <Cell key={cellIdx} isLit={false} flipCellsAroundMe={flipCellsAround}/>;
       })}
     </tr>
     )
