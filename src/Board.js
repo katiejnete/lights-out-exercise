@@ -65,7 +65,7 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
         directions.forEach(([dy, dx]) => {
           const newY = y+dy;
           const newX = x+dx;
-          
+
           if (isValidCoord(newY, newX)) {
             boardCopy[newY][newX] = !boardCopy[newY][newX];
           }
@@ -85,32 +85,18 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
 
   // TODO
   // make table board
-  const tableBoard = board.map((row, rowIdx) => {
-    return (
-      <tr key={rowIdx}>
-        {row.map((cell, cellIdx) => {
-          if (cell)
-            return (
-              <Cell
-                key={`${rowIdx}-${cellIdx}`}
-                coord={`${rowIdx}-${cellIdx}`}
-                isLit={true}
-                flipCellsAroundMe={flipCellsAround}
-              />
-            );
-          else
-            return (
-              <Cell
-                key={`${rowIdx}-${cellIdx}`}
-                coord={`${rowIdx}-${cellIdx}`}
-                isLit={false}
-                flipCellsAroundMe={flipCellsAround}
-              />
-            );
-        })}
-      </tr>
-    );
-  });
+  const tableBoard = board.map((row, rowIdx) => (
+    <tr key={rowIdx}>
+      {row.map((cell,cellIdx) => (
+        <Cell 
+        key={`${rowIdx}-${cellIdx}`}
+        coord={`${rowIdx}-${cellIdx}`}
+        isLit={cell}
+        flipCellsAroundMe={flipCellsAround}
+        />
+      ))}
+    </tr>
+  ));
 
   return (
     <>
