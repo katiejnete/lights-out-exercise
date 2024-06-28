@@ -50,20 +50,26 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
       // TODO: Make a (deep) copy of the oldBoard
       const boardCopy = oldBoard.map((row) => [...row]);
 
+      const isValidCoord = (y, x) => x >= 0 && x < ncols && y >= 0 && y < nrows;
+
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
+        const directions = [
+          [0,0],
+          [0,1],
+          [0,-1],
+          [1,0],
+          [-1,0]
+        ];
 
-        if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
-          boardCopy[y][x] = !boardCopy[y][x];
-        }
-          // boardCopy[y][x + 1] =
-          //   x + 1 < ncols ? !boardCopy[y][x + 1] : boardCopy[y][x + 1];
-          // boardCopy[y][x - 1] =
-          //   x - 1 >= 0 ? !boardCopy[y][x - 1] : boardCopy[y][x - 1];
-          // boardCopy[y - 1][x] =
-          //   y - 1 >= 0 ? !boardCopy[y - 1][x] : boardCopy[y - 1][x];
-          // boardCopy[y + 1][x] =
-          //   y + 1 < nrows ? !boardCopy[y + 1][x] : boardCopy[y + 1][x];
+        directions.forEach(([dy, dx]) => {
+          const newY = y+dy;
+          const newX = x+dx;
+          
+          if (isValidCoord(newY, newX)) {
+            boardCopy[newY][newX] = !boardCopy[newY][newX];
+          }
+        })
       };
 
       // TODO: in the copy, flip this cell and the cells around it
