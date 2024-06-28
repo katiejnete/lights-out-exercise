@@ -40,17 +40,15 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
-    if (
-      board.forEach((row) => {
-        if (row.includes(true)) return false;
-      })
-    )
-      return true;
+    return board.every(row => row.every(cell => !cell));
   }
 
   function flipCellsAround(coord) {
     setBoard((oldBoard) => {
       const [y, x] = coord.split("-").map(Number);
+
+      // TODO: Make a (deep) copy of the oldBoard
+      const boardCopy = oldBoard.map((row) => [...row]);
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
@@ -58,18 +56,15 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
         if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
-        boardCopy[y][x + 1] =
-          x + 1 < ncols ? !boardCopy[y][x + 1] : boardCopy[y][x + 1];
-        boardCopy[y][x - 1] =
-          x - 1 >= 0 ? !boardCopy[y][x - 1] : boardCopy[y][x - 1];
-        boardCopy[y - 1][x] =
-          y - 1 >= 0 ? !boardCopy[y - 1][x] : boardCopy[y - 1][x];
-        boardCopy[y + 1][x] =
-          y + 1 < nrows ? !boardCopy[y + 1][x] : boardCopy[y + 1][x];
+          // boardCopy[y][x + 1] =
+          //   x + 1 < ncols ? !boardCopy[y][x + 1] : boardCopy[y][x + 1];
+          // boardCopy[y][x - 1] =
+          //   x - 1 >= 0 ? !boardCopy[y][x - 1] : boardCopy[y][x - 1];
+          // boardCopy[y - 1][x] =
+          //   y - 1 >= 0 ? !boardCopy[y - 1][x] : boardCopy[y - 1][x];
+          // boardCopy[y + 1][x] =
+          //   y + 1 < nrows ? !boardCopy[y + 1][x] : boardCopy[y + 1][x];
       };
-
-      // TODO: Make a (deep) copy of the oldBoard
-      const boardCopy = oldBoard.map((row) => [...row]);
 
       // TODO: in the copy, flip this cell and the cells around it
       flipCell(y, x, boardCopy);
@@ -84,24 +79,40 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
 
   // TODO
   // make table board
-  const tableBoard = board.map((row,rowIdx) => {
+  const tableBoard = board.map((row, rowIdx) => {
     return (
       <tr key={rowIdx}>
-      {row.map((cell,cellIdx) => {
-        if (cell) return <Cell key={cellIdx} isLit={true} flipCellsAroundMe={flipCellsAround} />;
-        else return <Cell key={cellIdx} isLit={false} flipCellsAroundMe={flipCellsAround}/>;
-      })}
-    </tr>
-    )
+        {row.map((cell, cellIdx) => {
+          if (cell)
+            return (
+              <Cell
+                key={`${rowIdx}-${cellIdx}`}
+                coord={`${rowIdx}-${cellIdx}`}
+                isLit={true}
+                flipCellsAroundMe={flipCellsAround}
+              />
+            );
+          else
+            return (
+              <Cell
+                key={`${rowIdx}-${cellIdx}`}
+                coord={`${rowIdx}-${cellIdx}`}
+                isLit={false}
+                flipCellsAroundMe={flipCellsAround}
+              />
+            );
+        })}
+      </tr>
+    );
   });
 
-  return (<>
-  <table>
-    <tbody>
-      {tableBoard}
-    </tbody>
-  </table>
-  </>);
+  return (
+    <>
+      <table>
+        <tbody>{tableBoard}</tbody>
+      </table>
+    </>
+  );
 }
 
 export default Board;
